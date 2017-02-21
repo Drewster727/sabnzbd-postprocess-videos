@@ -1,7 +1,4 @@
-# get job params
-# determine if the folder has just one video file (.mkv, .avi, .mpg, .mp4, .wmv, .ts)
-## if false... exit
-## if true... name that file the job name
+# Drew McMinn © 2017
 
 import os
 import sys
