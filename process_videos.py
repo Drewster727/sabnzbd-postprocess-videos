@@ -2,8 +2,21 @@
 
 import os
 import sys
+import itertools
 import shutil
 import subprocess
+
+def flattenDirectory(destination):
+    all_files = []
+    for root, _dirs, files in itertools.islice(os.walk(destination), 1, None):
+        for filename in files:
+            all_files.append(os.path.join(root, filename))
+    for filename in all_files:
+	newpath=os.path.join(destination, os.path.basename(filename))
+	if (os.path.exists(newpath)):
+	   os.remove(newpath)
+        shutil.move(filename, destination)
+    return;
 
 def getAllFiles(directory):
    all_files = os.listdir(directory)
@@ -17,35 +30,21 @@ def getVideoFiles(directory):
          video_files.append(name)
    return video_files;
 
-def getFolderSize(folder):
-    total_size = os.path.getsize(folder)
-    for item in os.listdir(folder):
-        itempath = os.path.join(folder, item)
-        if os.path.isfile(itempath):
-            total_size += os.path.getsize(itempath)
-        elif os.path.isdir(itempath):
-            total_size += getFolderSize(itempath)
-    return total_size;
-
 def removeSmallFiles(directory, threshold):
    all_files = getAllFiles(directory)
    for name in all_files:
       file=directory + '/' + name
       isFolder=os.path.isdir(file)
-      size=0
 
-      if (isFolder):
-	  size=getFolderSize(file)
-      else:
-	  size=os.path.getsize(file) >> 20
+      if (os.path.isdir(file)):
+	shutil.rmtree(file)
+	continue
+
+      size=os.path.getsize(file) >> 20
 
       if (size < threshold):
-	if (isFolder):
-	   print 'Removing Folder (size too small): ' + file
-	   shutil.rmtree(file)
-	else:
-	   print 'Removing File (size too small): ' + file
-	   os.remove(file)
+	print 'Removing File (size too small): ' + file
+	os.remove(file)
    return;
 
 def removeVideoMetaData(directory):
@@ -69,6 +68,10 @@ except:
     except:
         print "No commandline parameters found"
         sys.exit(1)
+
+# flatten
+print 'Flattening contents of ' + directory
+flattenDirectory(directory)
 
 # remove files under 60MB
 removeSmallFiles(directory, 60)
