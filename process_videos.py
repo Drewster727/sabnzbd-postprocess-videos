@@ -84,7 +84,7 @@ if len(video_files) == 1:
    fp=directory + '/' + existing
    ext=os.path.splitext(existing)[-1]
    new=jobname + ext
-   if (new != existing):
+   if (new.lower() != existing.lower()):
       print 'Renaming ' + existing + ' to ' + new
       shutil.move(fp, os.path.join(directory,new))
 
