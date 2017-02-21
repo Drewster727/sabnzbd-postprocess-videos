@@ -59,11 +59,13 @@ removeSmallFiles(directory, 60)
 video_files = getVideoFiles(directory)
 
 if len(video_files) == 1:
-   fp=directory + '/' + video_files[0]
-   ext=os.path.splitext(video_files[0])[-1]
-   print 'Renaming ' + video_files[0] + ' to ' + jobname + ext
-   shutil.move(fp, os.path.join(directory,jobname + ext))
-   #os.rename(fp, os.path.join(directory,jobname + ext))
+   existing=video_files[0]
+   fp=directory + '/' + existing
+   ext=os.path.splitext(existing)[-1]
+   new=jobname + ext
+   if (new != existing):
+      print 'Renaming ' + existing + ' to ' + new
+      shutil.move(fp, os.path.join(directory,new))
 
 # remove metadata
 removeVideoMetaData(directory)
