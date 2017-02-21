@@ -20,19 +20,36 @@ def getVideoFiles(directory):
          video_files.append(name)
    return video_files;
 
+def getFolderSize(folder):
+    total_size = os.path.getsize(folder)
+    for item in os.listdir(folder):
+        itempath = os.path.join(folder, item)
+        if os.path.isfile(itempath):
+            total_size += os.path.getsize(itempath)
+        elif os.path.isdir(itempath):
+            total_size += getFolderSize(itempath)
+    return total_size;
+
 def removeSmallFiles(directory, threshold):
    all_files = getAllFiles(directory)
    for name in all_files:
       file=directory + '/' + name
-      size=os.path.getsize(file) >> 20
-      if (size < threshold):
-        print 'Removing File (size too small): ' + file
-        if (os.path.isdir(file)):
-           shutil.rmtree(file)
-        else:
-           os.remove(file)
-   return;
+      isFolder=os.path.isdir(file)
+      size=0
 
+      if (isFolder):
+	  size=getFolderSize(file)
+      else:
+	  size=os.path.getsize(file) >> 20
+
+      if (size < threshold):
+	if (isFolder):
+	   print 'Removing Folder (size too small): ' + file
+	   shutil.rmtree(file)
+	else:
+	   print 'Removing File (size too small): ' + file
+	   os.remove(file)
+   return;
 
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
@@ -40,7 +57,7 @@ def removeVideoMetaData(directory):
    	orig=directory + '/' + f
 	withmeta=orig + '.withmeta'
    	os.rename(orig, withmeta)
-	print 'Removing metadata from ' + orig
+	print 'Removing metadata from ' + f
    	subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
    	os.remove(withmeta)
    	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
@@ -74,7 +91,6 @@ if len(video_files) == 1:
 # remove metadata
 removeVideoMetaData(directory)
 
-print 'Completed'
-
 # Success code
+print 'Completed'
 sys.exit(0)
