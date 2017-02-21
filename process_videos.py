@@ -26,9 +26,13 @@ def removeSmallFiles(directory, threshold):
       file=directory + '/' + name
       size=os.path.getsize(file) >> 20
       if (size < threshold):
-	print 'Removing File (size too small): ' + file
-	os.remove(file)
+        print 'Removing File (size too small): ' + file
+        if (os.path.isdir(file)):
+           shutil.rmtree(file)
+        else:
+           os.remove(file)
    return;
+
 
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
