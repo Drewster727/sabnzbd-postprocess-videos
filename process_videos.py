@@ -33,7 +33,7 @@ def getVideoFiles(directory):
 def removeSmallFiles(directory, threshold):
    all_files = getAllFiles(directory)
    for name in all_files:
-      file=directory + '/' + name
+      file=os.path.join(directory, name)
       isFolder=os.path.isdir(file)
 
       if (os.path.isdir(file)):
@@ -50,7 +50,7 @@ def removeSmallFiles(directory, threshold):
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
    for f in files:
-   	orig=directory + '/' + f
+   	orig=os.path.join(directory, f)
 	withmeta=orig + '.withmeta'
    	os.rename(orig, withmeta)
 	print 'Removing metadata from ' + f
