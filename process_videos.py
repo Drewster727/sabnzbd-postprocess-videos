@@ -1,4 +1,4 @@
-# Drew McMinn © 2017
+# Drew McMinn, Copyright 2017
 
 import os
 import sys
