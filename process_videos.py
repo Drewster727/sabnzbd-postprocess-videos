@@ -16,7 +16,6 @@ def flattenDirectory(destination):
 	if (os.path.exists(newpath)):
 	   os.remove(newpath)
         shutil.move(filename, destination)
-    return;
 
 def getAllFiles(directory):
    all_files = os.listdir(directory)
@@ -45,7 +44,6 @@ def removeSmallFiles(directory, threshold):
       if (size < threshold):
 	print 'Removing File (size too small): ' + file
 	os.remove(file)
-   return;
 
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
@@ -57,7 +55,6 @@ def removeVideoMetaData(directory):
    	subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
    	os.remove(withmeta)
    	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
-   return;
 
 try:
     (scriptname,directory,orgnzbname,jobname,reportnumber,category,group,postprocstatus,url) = sys.argv
