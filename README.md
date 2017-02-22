@@ -15,9 +15,14 @@ Post-processing videos and related files to provide you with a cleaner end-resul
 * python (tested with 2.7.x)
 * ffmpeg (for metadata removal)
 
-## SABNZBD Configuration
+## SABnzbd Configuration
 1. Set a scripts folder under: Settings > Folders > Scripts folder
+
+![image](https://cloud.githubusercontent.com/assets/4528753/23218188/36b603e8-f8e1-11e6-9d47-2a148701954f.png)
+
 2. Drop the script into the folder you set and make sure sabnzbd has rights (Linux: sudo chmod +x process_videos.py)
 3. Set the script to run for certain categories under: Settings > Categories (i.e. TV or Movies or any other video categories you might have)
+
+![image](https://cloud.githubusercontent.com/assets/4528753/23218265/6fe5a5d8-f8e1-11e6-8f75-8b9567343287.png)
 
 ### Note: This script will remove subtitle files due to their small size. I personally do not use sub files and prefer hard subs embedded in my videos.
