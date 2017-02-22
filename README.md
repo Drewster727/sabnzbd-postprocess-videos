@@ -5,6 +5,7 @@ Post-processing videos and related files to provide you with a cleaner end-resul
 * Flattens the contents
  * Sometimes people embed video and other file types in a crazy folder structure, first we flatten this out so we can process everything
 * Removes files smaller than 60MB
+ * This is of course an arbitrary number I chose based on experience, anything smaller than that is typically NOT something we need
 * Attempts to fix obfuscated video file names 
  * Only works with downloads that contain a single video file, i.e. it won't work with TV seasons or multi-part movies
 * Removes Title and Comments metadata
