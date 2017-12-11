@@ -52,7 +52,7 @@ def removeVideoMetaData(directory):
    	orig=os.path.join(directory, f)
 	withmeta=orig + '.withmeta'
    	os.rename(orig, withmeta)
-	
+
 	print 'Probing metadata in ' + f
 	process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
 	out, err = process.communicate()
@@ -61,7 +61,7 @@ def removeVideoMetaData(directory):
 	print 'Removing metadata from ' + f
 	if re.search('language=eng', out, re.IGNORECASE):
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
-	else
+	else:
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 
    	os.remove(withmeta)
