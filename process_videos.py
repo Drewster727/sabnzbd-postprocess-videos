@@ -5,6 +5,7 @@ import sys
 import itertools
 import shutil
 import subprocess
+import re
 
 def flattenDirectory(destination):
     all_files = []
@@ -58,8 +59,10 @@ def removeVideoMetaData(directory):
 	print(out)
 
 	print 'Removing metadata from ' + f
-	if (out)
+	if (re.search('language=eng', out, re.IGNORECASE))
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+	else
+	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 
    	os.remove(withmeta)
    	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
