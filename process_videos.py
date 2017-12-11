@@ -60,7 +60,7 @@ def removeVideoMetaData(directory):
 	print 'Removing metadata from ' + f
 	if (out)
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
-		
+
    	os.remove(withmeta)
    	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
 
