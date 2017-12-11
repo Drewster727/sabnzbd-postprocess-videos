@@ -51,8 +51,16 @@ def removeVideoMetaData(directory):
    	orig=os.path.join(directory, f)
 	withmeta=orig + '.withmeta'
    	os.rename(orig, withmeta)
+	
+	print 'Probing metadata in ' + f
+	process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
+	out, err = process.communicate()
+	print(out)
+
 	print 'Removing metadata from ' + f
-   	subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+	if (out)
+	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+		
    	os.remove(withmeta)
    	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
 
