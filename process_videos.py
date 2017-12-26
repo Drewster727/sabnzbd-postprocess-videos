@@ -63,7 +63,7 @@ def removeVideoMetaData(directory):
 	  print("Found english track, removing all other audio tracks")
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 	else:
-	  print("Did NOT find english track, retaining all audio trakcs")
+	  print("Did NOT find english track, retaining all audio tracks")
 	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 
    	os.remove(withmeta)
