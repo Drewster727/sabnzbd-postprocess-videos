@@ -1,4 +1,4 @@
-# Drew McMinn, Copyright 2017
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -13,9 +13,9 @@ def flattenDirectory(destination):
         for filename in files:
             all_files.append(os.path.join(root, filename))
     for filename in all_files:
-	newpath=os.path.join(destination, os.path.basename(filename))
-	if (os.path.exists(newpath)):
-	   os.remove(newpath)
+   newpath=os.path.join(destination, os.path.basename(filename))
+   if (os.path.exists(newpath)):
+      os.remove(newpath)
         shutil.move(filename, destination)
 
 def getAllFiles(directory):
@@ -37,44 +37,44 @@ def removeSmallFiles(directory, threshold):
       isFolder=os.path.isdir(file)
 
       if (os.path.isdir(file)):
-	shutil.rmtree(file)
-	continue
+   shutil.rmtree(file)
+   continue
 
       size=os.path.getsize(file) >> 20
 
       if (size < threshold):
-	print 'Removing File (size too small): ' + file
-	os.remove(file)
+   print 'Removing File (size too small): ' + file
+   os.remove(file)
 
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
    for f in files:
-   	orig=os.path.join(directory, f)
-	withmeta=orig + '.withmeta'
-   	os.rename(orig, withmeta)
+      orig=os.path.join(directory, f)
+   withmeta=orig + '.withmeta'
+      os.rename(orig, withmeta)
 
-	print 'Probing metadata in ' + f
-	process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
-	out, err = process.communicate()
-	print(out)
+   print 'Probing metadata in ' + f
+   process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
+   out, err = process.communicate()
+   print(out)
 
-	print 'Removing metadata from ' + f
-	if re.search('language=eng', out, re.IGNORECASE):
-	  print("Found english track, removing all other audio tracks")
-	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
-	else:
-	  print("Did NOT find english track, retaining all audio tracks")
-	  subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+   print 'Removing metadata from ' + f
+   if re.search('language=eng', out, re.IGNORECASE):
+     print("Found english track, removing all other audio tracks")
+     subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+   else:
+     print("Did NOT find english track, retaining all audio tracks")
+     subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 
-   	os.remove(withmeta)
-   	#ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
+      os.remove(withmeta)
+      #ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
 
 try:
     (scriptname,directory,orgnzbname,jobname,reportnumber,category,group,postprocstatus,url) = sys.argv
 except:
     try:
-	directory = sys.argv[1]
-	jobname = sys.argv[3]
+   directory = sys.argv[1]
+   jobname = sys.argv[3]
     except:
         print "No commandline parameters found"
         sys.exit(1)
