@@ -8,15 +8,16 @@ import subprocess
 import re
 
 def flattenDirectory(destination):
-    all_files = []
-    for root, _dirs, files in itertools.islice(os.walk(destination), 1, None):
-        for filename in files:
-            all_files.append(os.path.join(root, filename))
-    for filename in all_files:
-   newpath=os.path.join(destination, os.path.basename(filename))
-   if (os.path.exists(newpath)):
-      os.remove(newpath)
-        shutil.move(filename, destination)
+   all_files = []
+   for root, _dirs, files in itertools.islice(os.walk(destination), 1, None):
+      for filename in files:
+         all_files.append(os.path.join(root, filename))
+
+   for filename in all_files:
+      newpath=os.path.join(destination, os.path.basename(filename))
+      if (os.path.exists(newpath)):
+         os.remove(newpath)
+         shutil.move(filename, destination)
 
 def getAllFiles(directory):
    all_files = os.listdir(directory)
@@ -37,20 +38,20 @@ def removeSmallFiles(directory, threshold):
       isFolder=os.path.isdir(file)
 
       if (os.path.isdir(file)):
-   shutil.rmtree(file)
-   continue
+         shutil.rmtree(file)
+         continue
 
       size=os.path.getsize(file) >> 20
 
       if (size < threshold):
-   print 'Removing File (size too small): ' + file
-   os.remove(file)
+         print 'Removing File (size too small): ' + file
+         os.remove(file)
 
 def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
    for f in files:
       orig=os.path.join(directory, f)
-   withmeta=orig + '.withmeta'
+      withmeta=orig + '.withmeta'
       os.rename(orig, withmeta)
 
    print 'Probing metadata in ' + f
@@ -66,18 +67,18 @@ def removeVideoMetaData(directory):
      print("Did NOT find english track, retaining all audio tracks")
      subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
 
-      os.remove(withmeta)
-      #ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
+   os.remove(withmeta)
+   #ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
 
 try:
-    (scriptname,directory,orgnzbname,jobname,reportnumber,category,group,postprocstatus,url) = sys.argv
+   (scriptname,directory,orgnzbname,jobname,reportnumber,category,group,postprocstatus,url) = sys.argv
 except:
-    try:
-   directory = sys.argv[1]
-   jobname = sys.argv[3]
-    except:
-        print "No commandline parameters found"
-        sys.exit(1)
+   try:
+      directory = sys.argv[1]
+      jobname = sys.argv[3]
+   except:
+      print "No commandline parameters found"
+      sys.exit(1)
 
 # flatten
 print 'Flattening contents of ' + directory
