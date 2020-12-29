@@ -12,7 +12,7 @@ Post-processing videos and related files to provide you with a cleaner end-resul
   - This is done to avoid media libraries like Plex reading from the metadata as opposed to file name. I recently ran into a scenario where Plex had read a file's metadata title and used that in the library as opposed to parsing the file name. This has caused some wild names to appear in my library.
 
 ## Dependencies
-* python (tested with 2.7.x)
+* python3
 * ffmpeg (for metadata removal)
 
 ## SABnzbd Configuration
