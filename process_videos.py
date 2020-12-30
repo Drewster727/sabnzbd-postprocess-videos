@@ -44,7 +44,7 @@ def removeSmallFiles(directory, threshold):
       size=os.path.getsize(file) >> 20
 
       if (size < threshold):
-         print 'Removing File (size too small): ' + file
+         print("Removing File (size too small): " + file)
          os.remove(file)
 
 def removeVideoMetaData(directory):
@@ -54,12 +54,12 @@ def removeVideoMetaData(directory):
       withmeta=orig + '.withmeta'
       os.rename(orig, withmeta)
 
-   print 'Probing metadata in ' + f
+   print('Probing metadata in ' + f)
    process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
    out, err = process.communicate()
    print(out)
 
-   print 'Removing metadata from ' + f
+   print('Removing metadata from ' + f)
    if re.search('language=eng', out, re.IGNORECASE):
      print("Found english track, removing all other audio tracks")
      subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
@@ -77,11 +77,11 @@ except:
       directory = sys.argv[1]
       jobname = sys.argv[3]
    except:
-      print "No commandline parameters found"
+      print("No commandline parameters found")
       sys.exit(1)
 
 # flatten
-print 'Flattening contents of ' + directory
+print("Flattening contents of " + directory)
 flattenDirectory(directory)
 
 # remove files under 60MB
@@ -96,12 +96,12 @@ if len(video_files) == 1:
    ext=os.path.splitext(existing)[-1]
    new=jobname + ext
    if (new.lower() != existing.lower()):
-      print 'Renaming ' + existing + ' to ' + new
+      print("Renaming " + existing + " to " + new)
       shutil.move(fp, os.path.join(directory,new))
 
 # remove metadata
 removeVideoMetaData(directory)
 
 # Success code
-print 'Completed'
+print('Completed')
 sys.exit(0)
