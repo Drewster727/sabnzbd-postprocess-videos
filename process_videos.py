@@ -51,21 +51,21 @@ def removeVideoMetaData(directory):
    files = getVideoFiles(directory)
    for f in files:
       orig=os.path.join(directory, f)
-      withmeta=orig + '.withmeta'
+      withmeta=orig + ".withmeta"
       os.rename(orig, withmeta)
 
-   print('Probing metadata in ' + f)
-   process = subprocess.Popen(['ffprobe', '-v', 'error', '-show_entries', 'stream_tags=language', '-of', 'default=noprint_wrappers=1', withmeta], stdout=subprocess.PIPE)
+   print("Probing metadata in " + f)
+   process = subprocess.Popen(["ffprobe", "-v", "error", "-show_entries", "stream_tags=language", "-of", "default=noprint_wrappers=1", withmeta], stdout=subprocess.PIPE)
    out, err = process.communicate()
    print(out)
 
-   print('Removing metadata from ' + f)
-   if re.search('language=eng', out, re.IGNORECASE):
+   print("Removing metadata from " + f)
+   if re.search("language=eng", out, re.IGNORECASE):
      print("Found english track, removing all other audio tracks")
-     subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:m:language:eng', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+     subprocess.call(["ffmpeg", "-loglevel", "error", "-y", "-i", withmeta, "-map", "0:v", "-map", "0:m:language:eng", "-c", "copy", "-map_metadata", "-1", "-metadata", "title=", "-metadata", "comment=", orig])
    else:
      print("Did NOT find english track, retaining all audio tracks")
-     subprocess.call(['ffmpeg', '-loglevel', 'error', '-y', '-i', withmeta, '-map', '0:v', '-map', '0:a', '-c', 'copy', '-map_metadata', '-1', '-metadata', 'title=', '-metadata', 'comment=', orig])
+     subprocess.call(["ffmpeg", "-loglevel", "error", "-y", "-i", withmeta, "-map", "0:v", "-map", "0:a", "-c", "copy", "-map_metadata", "-1", "-metadata", "title=", "-metadata", "comment=", orig])
 
    os.remove(withmeta)
    #ffmpeg -y -i "fwc.mp4" -c copy -map_metadata -1 -metadata title="" -metadata comments="" "fwc_test.mp4" 
@@ -92,7 +92,7 @@ video_files = getVideoFiles(directory)
 
 if len(video_files) == 1:
    existing=video_files[0]
-   fp=directory + '/' + existing
+   fp=directory + "/" + existing
    ext=os.path.splitext(existing)[-1]
    new=jobname + ext
    if (new.lower() != existing.lower()):
@@ -103,5 +103,5 @@ if len(video_files) == 1:
 removeVideoMetaData(directory)
 
 # Success code
-print('Completed')
+print("Completed")
 sys.exit(0)
