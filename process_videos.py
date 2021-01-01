@@ -21,7 +21,7 @@ def flattenDirectory(destination):
 
 def getAllFiles(directory):
    all_files = os.listdir(directory)
-   return all_files;
+   return all_files
 
 def getVideoFiles(directory):
    all_files = getAllFiles(directory)
@@ -29,7 +29,7 @@ def getVideoFiles(directory):
    for name in all_files:
       if (name.endswith((".mkv", ".avi", ".mpg", ".mpeg", ".mp4", ".wmv", ".ts"))):
          video_files.append(name)
-   return video_files;
+   return video_files
 
 def removeSmallFiles(directory, threshold):
    all_files = getAllFiles(directory)
@@ -60,7 +60,7 @@ def removeVideoMetaData(directory):
    print(out)
 
    print("Removing metadata from " + f)
-   if re.search("language=eng", out, re.IGNORECASE):
+   if re.search('language=eng', out, re.IGNORECASE):
      print("Found english track, removing all other audio tracks")
      subprocess.call(["ffmpeg", "-loglevel", "error", "-y", "-i", withmeta, "-map", "0:v", "-map", "0:m:language:eng", "-c", "copy", "-map_metadata", "-1", "-metadata", "title=", "-metadata", "comment=", orig])
    else:
